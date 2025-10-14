@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three-Tier Demo</title>
+</head>
+<body style="font-family: Arial; text-align:center; margin-top:50px;">
+    <h1>🌐 Three-Tier Demo Application</h1>
+    <p id="result">Loading...</p>
+
+    <script>
+        async function loadData() {
+            try {
+                const response = await fetch('http://localhost:5000');
+                const text = await response.text();
+                document.getElementById('result').innerHTML = text;
+            } catch (err) {
+                document.getElementById('result').innerHTML = '❌ Could not reach backend';
+            }
+        }
+        loadData();
+    </script>
+</body>
+</html>
+
