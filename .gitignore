@@ -1,0 +1,4 @@
+# Ignore SSH keys
+*.pem
+*.pub
+frontend/github_actions_key*
