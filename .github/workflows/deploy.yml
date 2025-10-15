@@ -15,18 +15,21 @@ jobs:
 
       - name: Setup SSH key
         run: |
+          set -e
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_KEY }}" | tr -d '\r' > ~/.ssh/ec2_key.pem
           chmod 600 ~/.ssh/ec2_key.pem
 
       - name: Add EC2 host to known_hosts
         run: |
-          ssh-keyscan -H 65.1.129.49 >> ~/.ssh/known_hosts
+          # Using your new EC2 IP
+          ssh-keyscan -t rsa -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
       - name: Deploy to EC2
         run: |
-          ssh -i ~/.ssh/ec2_key.pem ubuntu@65.1.129.49 << 'EOF'
-            # Go to app folder (or clone if missing), pull latest, restart containers
+          ssh -i ~/.ssh/ec2_key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            set -e
+            # Go to app folder or clone if missing, pull latest, restart containers
             cd ~/3-tier-app || (git clone https://github.com/${{ github.repository }}.git 3-tier-app && cd 3-tier-app)
             git pull origin main
             sudo docker-compose down
