@@ -26,7 +26,6 @@ jobs:
       - name: Deploy to EC2
         run: |
           ssh -i ~/.ssh/ec2_key.pem ${{ secrets.EC2_USER }}@65.1.129.49 << 'EOF'
-            # go to folder (or clone if missing), pull latest and restart containers
             cd ~/3-tier-app || (git clone https://github.com/${{ github.repository }}.git 3-tier-app && cd 3-tier-app)
             git pull origin main
             sudo docker-compose down
